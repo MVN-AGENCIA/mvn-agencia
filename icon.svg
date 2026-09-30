@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+<rect width="512" height="512" rx="110" fill="#090909"/>
+<circle cx="256" cy="256" r="190" fill="none" stroke="#d9a928" stroke-width="18"/>
+<text x="256" y="280" text-anchor="middle" font-family="Arial,sans-serif" font-size="105" font-weight="800" fill="#f4cf65">MVN</text>
+<text x="256" y="350" text-anchor="middle" font-family="Arial,sans-serif" font-size="34" letter-spacing="8" fill="white">AGÊNCIA</text>
+</svg>

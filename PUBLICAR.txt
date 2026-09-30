@@ -1,0 +1,18 @@
+MVN AGÊNCIA — PWA PRONTA PARA PUBLICAÇÃO
+
+Esta pasta contém:
+- index.html — aplicação
+- manifest.json — instalação no ecrã inicial
+- sw.js — cache/offline básico
+- icon.svg — ícone da MVN Agência
+
+IMPORTANTE:
+Para instalar pelo Chrome como aplicativo, os ficheiros precisam estar publicados num endereço HTTPS.
+
+PASSOS:
+1. Enviar estes ficheiros para um serviço de hospedagem de sites.
+2. Abrir o endereço HTTPS no Chrome do Android.
+3. No menu do Chrome, escolher “Adicionar ao ecrã inicial” ou “Instalar app”.
+4. O MVN Agência aparecerá como aplicativo no telemóvel.
+
+Os produtos e preços ainda são exemplos e devem ser substituídos pelos produtos reais.

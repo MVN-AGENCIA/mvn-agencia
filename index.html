@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0a0a0a">
+<meta name="description" content="MVN Agência — cosméticos, bijuterias, relógios e acessórios.">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<title>MVN Agência</title>
+<style>
+:root{--gold:#d9a928;--gold2:#f4cf65;--black:#080808;--card:#151515;--muted:#aaa;--white:#fff}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#090909;color:#fff}
+header{position:sticky;top:0;z-index:5;background:#090909ee;border-bottom:1px solid #33280e;padding:14px}
+.brand{font-size:25px;font-weight:800;color:var(--gold);letter-spacing:2px}.sub{font-size:10px;letter-spacing:4px;color:#fff}
+.search{margin-top:12px;background:#fff;border-radius:25px;padding:11px 15px;color:#555;border:0;width:100%}
+nav{display:flex;gap:8px;overflow:auto;padding:12px 14px;background:#0d0d0d}
+nav button,.cat{border:1px solid #604b14;background:#151515;color:#fff;border-radius:20px;padding:9px 14px;white-space:nowrap}
+nav button.active{background:var(--gold);color:#000;font-weight:700}
+.hero{margin:14px;border:1px solid #5d4813;border-radius:18px;padding:25px;background:linear-gradient(135deg,#111,#211804)}
+.hero h1{margin:0;color:var(--gold2);font-size:28px}.hero p{color:#ddd}.btn{background:var(--gold);border:0;border-radius:22px;padding:12px 18px;font-weight:700}
+section{padding:0 14px 80px}.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.card{background:var(--card);border:1px solid #292929;border-radius:15px;overflow:hidden}.pic{height:145px;background:linear-gradient(135deg,#262626,#111);display:flex;align-items:center;justify-content:center;font-size:48px}.info{padding:12px}.info h3{font-size:15px;margin:0 0 6px}.price{color:var(--gold2);font-weight:800}.small{color:#999;font-size:12px}.add{width:100%;margin-top:9px;padding:9px;border:0;border-radius:10px;background:#f0bd3d;color:#111;font-weight:700}
+.cart{position:fixed;bottom:14px;right:14px;z-index:10;background:var(--gold);color:#000;border-radius:30px;padding:13px 18px;font-weight:800;box-shadow:0 5px 25px #000}
+.modal{display:none;position:fixed;inset:0;background:#000b;z-index:20;align-items:flex-end}.sheet{background:#111;border-radius:22px 22px 0 0;width:100%;max-height:85vh;overflow:auto;padding:20px;border-top:1px solid #604b14}.row{display:flex;justify-content:space-between;gap:10px;padding:12px 0;border-bottom:1px solid #292929}.close{float:right;background:none;color:#fff;border:0;font-size:25px}.contact{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:15px}.contact a{padding:14px;border:1px solid #604b14;border-radius:12px;text-align:center;color:#fff;text-decoration:none}
+footer{position:fixed;bottom:0;left:0;right:0;background:#101010;border-top:1px solid #30250c;display:flex;justify-content:space-around;padding:10px;font-size:11px}footer button{background:none;border:0;color:#bbb}footer button.active{color:var(--gold2)}
+</style>
+</head>
+<body>
+<header><div class="brand">♛ MVN <span class="sub">AGÊNCIA</span></div><input id="search" class="search" placeholder="Pesquisar produtos..." oninput="render()"></header>
+<nav id="cats"></nav>
+<div class="hero"><h1>Beleza que realça o seu melhor.</h1><p>Cosméticos, bijuterias, relógios e acessórios num só lugar.</p><button class="btn" onclick="document.getElementById('produtos').scrollIntoView()">Comprar agora</button></div>
+<section><h2 id="titulo">Produtos</h2><div id="produtos" class="grid"></div></section>
+<button class="cart" onclick="openCart()">🛒 Carrinho (<span id="count">0</span>)</button>
+<div id="modal" class="modal" onclick="if(event.target===this)closeCart()"><div class="sheet"><button class="close" onclick="closeCart()">×</button><h2>Meu carrinho</h2><div id="cartItems"></div><h3>Total: <span id="total">0</span> MT</h3><button class="btn" style="width:100%" onclick="sendOrder()">Finalizar pedido pelo WhatsApp</button><div class="contact"><a href="tel:865802352">📞 Ligar</a><a href="https://wa.me/258845652020" target="_blank">💬 WhatsApp</a></div></div></div>
+<footer><button class="active" onclick="scrollTo(0,0)">⌂<br>Início</button><button onclick="document.getElementById('produtos').scrollIntoView()">▦<br>Categorias</button><button onclick="openCart()">🛒<br>Carrinho</button><button onclick="document.getElementById('modal').style.display='flex'">☎<br>Contacto</button></footer>
+<script>
+const products=[
+{name:"Base Líquida",cat:"Cosméticos",price:1200,icon:"💄"},
+{name:"Batom Matte",cat:"Cosméticos",price:850,icon:"💋"},
+{name:"Perfume Importado",cat:"Cosméticos",price:2500,icon:"🌸"},
+{name:"Creme Hidratante",cat:"Cosméticos",price:1450,icon:"🧴"},
+{name:"Brincos de Argola",cat:"Brincos",price:850,icon:"💎"},
+{name:"Colar Dourado",cat:"Colares",price:1800,icon:"📿"},
+{name:"Pulseira Elegante",cat:"Pulseiras",price:1200,icon:"✨"},
+{name:"Anel Feminino",cat:"Anéis",price:900,icon:"💍"},
+{name:"Relógio Masculino",cat:"Relógios",price:3200,icon:"⌚"},
+{name:"Óculos de Sol",cat:"Outros",price:1500,icon:"🕶️"}
+];
+let selected="Todos",cart=[];
+const cats=["Todos","Cosméticos","Brincos","Colares","Pulseiras","Anéis","Relógios","Outros"];
+function money(n){return n.toLocaleString("pt-MZ")+" MT"}
+function renderCats(){catsEl=document.getElementById("cats");catsEl.innerHTML=cats.map(c=>`<button class="${selected===c?'active':''}" onclick="selected='${c}';render()">${c}</button>`).join("")}
+function render(){renderCats();let q=document.getElementById("search").value.toLowerCase();let list=products.filter(p=>(selected==="Todos"||p.cat===selected)&&p.name.toLowerCase().includes(q));document.getElementById("titulo").textContent=selected==="Todos"?"Produtos":selected;document.getElementById("produtos").innerHTML=list.map((p,i)=>`<div class="card"><div class="pic">${p.icon}</div><div class="info"><h3>${p.name}</h3><div class="small">${p.cat}</div><div class="price">${money(p.price)}</div><button class="add" onclick="add(${products.indexOf(p)})">Adicionar</button></div></div>`).join("")}
+function add(i){cart.push(products[i]);update();alert("Produto adicionado ao carrinho!")}
+function update(){document.getElementById("count").textContent=cart.length}
+function openCart(){document.getElementById("modal").style.display="flex";let el=document.getElementById("cartItems");if(!cart.length){el.innerHTML="<p>O carrinho está vazio.</p>";document.getElementById("total").textContent="0";return}let total=cart.reduce((s,p)=>s+p.price,0);el.innerHTML=cart.map((p,i)=>`<div class="row"><span>${p.name}<br><small>${money(p.price)}</small></span><button onclick="cart.splice(${i},1);update();openCart()">Remover</button></div>`).join("");document.getElementById("total").textContent=money(total)}
+function closeCart(){document.getElementById("modal").style.display="none"}
+function sendOrder(){if(!cart.length)return alert("Adicione produtos primeiro.");let total=cart.reduce((s,p)=>s+p.price,0);let text="Olá, MVN Agência! Quero fazer este pedido:%0A"+cart.map(p=>"- "+p.name+" — "+money(p.price)).join("%0A")+"%0A%0ATotal: "+money(total);window.open("https://wa.me/258845652020?text="+text,"_blank")}
+render();
+</script>
+<script>if ("serviceWorker" in navigator) window.addEventListener("load",()=>navigator.serviceWorker.register("sw.js"));</script>
+</body>
+</html>
